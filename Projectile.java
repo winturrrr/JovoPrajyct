@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-
 public class Projectile extends Actor {
+    public static float cost = 5;
     private Texture texture;
     private Sprite sprite;
     private Player player;
