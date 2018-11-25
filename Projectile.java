@@ -5,9 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 
-//asdfghjsdfghjdfghj
-
-
 public class Projectile extends Actor {
     private Texture texture;
     private Sprite sprite;
