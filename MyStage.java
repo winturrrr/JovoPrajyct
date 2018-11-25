@@ -31,7 +31,7 @@ public class MyStage extends Stage  implements InputProcessor {
 
         Skin skin = new Skin();
         skin.add("bg",new Texture("badlogic.jpg"));
-        skin.add("knobr",new Texture("Sprite.png"));
+        skin.add("knob",new Texture("Sprite.png"));
         Touchpad.TouchpadStyle tp = new Touchpad.TouchpadStyle();
         tp.background = skin.getDrawable("bg");
         tp.knob = skin.getDrawable("knob");
