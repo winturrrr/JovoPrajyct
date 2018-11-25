@@ -30,11 +30,11 @@ public class MyStage extends Stage  implements InputProcessor {
         this.pos = new Vector2();
 
         Skin skin = new Skin();
-        skin.add("shit",new Texture("badlogic.jpg"));
-        skin.add("shittier",new Texture("Sprite.png"));
+        skin.add("bg",new Texture("badlogic.jpg"));
+        skin.add("knobr",new Texture("Sprite.png"));
         Touchpad.TouchpadStyle tp = new Touchpad.TouchpadStyle();
-        tp.background = skin.getDrawable("shit");
-        tp.knob = skin.getDrawable("shittier");
+        tp.background = skin.getDrawable("bg");
+        tp.knob = skin.getDrawable("knob");
         touchpad = new Touchpad(0,tp);
         touchpad.setName("touchpad");
         touchpad.setSize(getCamera().viewportWidth/4f,getCamera().viewportWidth/4f);
