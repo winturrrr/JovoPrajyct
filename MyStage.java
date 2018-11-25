@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -24,30 +26,38 @@ public class MyStage extends Stage  implements InputProcessor {
     private float zoomWidth;
     private float zoomHeight;
 
+    private Player player;
+
     public MyStage(Viewport viewport) {
         super(viewport);
         this.moving = false;
         this.pos = new Vector2();
 
         Skin skin = new Skin();
-        skin.add("bg",new Texture("badlogic.jpg"));
-        skin.add("knob",new Texture("Sprite.png"));
+        skin.add("shit",new Texture("badlogic.jpg"));
+        skin.add("shittier",new Texture("Sprite.png"));
         Touchpad.TouchpadStyle tp = new Touchpad.TouchpadStyle();
-        tp.background = skin.getDrawable("bg");
-        tp.knob = skin.getDrawable("knob");
+        tp.background = skin.getDrawable("shit");
+        tp.knob = skin.getDrawable("shittier");
         touchpad = new Touchpad(0,tp);
         touchpad.setName("touchpad");
-        touchpad.setSize(getCamera().viewportWidth/4f,getCamera().viewportWidth/4f);
+        touchpad.setSize(getCamera().viewportWidth/5f,getCamera().viewportWidth/5f);
         touchpad.getStyle().knob.setMinWidth(touchpad.getWidth()/3f);
         touchpad.getStyle().knob.setMinHeight(touchpad.getHeight()/3f);
 
-//        map = new Sprite(new Texture("tate-arena.png"));
-//        map.setPosition(0,0);
-//
-//
-//        CAM_HEIGHT = map.getTexture().getHeight()/4;
-//        CAM_WIDTH = map.getTexture().getWidth()/4;
+
         this.addActor(touchpad);
+
+        player = new Player("Player1",100f,100f,10f,3f,6);
+        player.setSize(getCamera().viewportWidth/4f,getCamera().viewportHeight/3f);
+        player.setPosition(getCamera().position.x - player.getWidth()/2f,getCamera().position.y - player.getHeight()/2f);
+
+//        player.setPosition(getCamera().position.x ,getCamera().position.y);
+//        player.setPosition(0,0);
+
+        this.addActor(player);
+
+
     }
 
     @Override
@@ -61,15 +71,11 @@ public class MyStage extends Stage  implements InputProcessor {
         pos.set(screenX,screenY);
         pos = this.screenToStageCoordinates(pos);
         Actor actor = hit(pos.x,pos.y,false);
-//        if(actor != null && actor.getName() == "touchpad"){
+
         moving = true;
         touchpadIndex = pointer;
 
         touchpad.setPosition(pos.x - touchpad.getWidth()/2f,pos.y - touchpad.getHeight()/2f);
-
-
-
-
 
 
         temp = super.touchDown(screenX, screenY, pointer, button);
@@ -80,9 +86,6 @@ public class MyStage extends Stage  implements InputProcessor {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         temp = super.touchDragged(screenX, screenY, pointer);
-//        if(moving == true && touchpadIndex == pointer){
-//            ((OrthographicCamera)this.getCamera()).translate(touchpad.getKnobX()*0.03f,0);
-//        }
         return temp;
 
     }
@@ -101,8 +104,7 @@ public class MyStage extends Stage  implements InputProcessor {
 
         if(moving == true)
         {
-//            touchpad.setZIndex(5);
-            float x = 4,y = 4;
+            float x = 2,y = 2;
 
             x *= touchpad.getKnobPercentX();
             y *= touchpad.getKnobPercentY();
@@ -126,30 +128,23 @@ public class MyStage extends Stage  implements InputProcessor {
 
 
             ((OrthographicCamera)this.getCamera()).translate(x ,y);
+
             pos.x += x;
             pos.y += y;
             touchpad.setPosition(pos.x - touchpad.getWidth()/2f ,pos.y - touchpad.getHeight()/2f );
+            player.setPosition(player.getX() + x,player.getY() + y);
 
 
-//            touchpad.setPosition();
-
-//            System.out.println(touchpad.getKnobX() + " : " + touchpad.getKnobY() + " : " + touchpad.getKnobPercentX());
-        }
-        else{
-//            touchpad.setZIndex(0);
         }
 
-//        pos.set(0,Gdx.graphics.getHeight());
-//        pos = this.screenToStageCoordinates(pos);
 
         super.draw();
-
-
     }
 
     @Override
     public void dispose() {
         super.dispose();
+        player.getSprite().getTexture().dispose();
 
     }
 
