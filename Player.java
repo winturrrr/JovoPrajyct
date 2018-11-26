@@ -1,10 +1,9 @@
-package com.tryagain.game;
-import com.badlogic.gdx.Gdx;
+package com.mygdx.game;
+
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+        import com.badlogic.gdx.graphics.g2d.Batch;
+        import com.badlogic.gdx.graphics.g2d.Sprite;
+        import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Player extends Actor {
 
@@ -16,7 +15,8 @@ public class Player extends Actor {
     private float speed;
     private float mana_regen;
 
-    private float projectile_speed = 3f;
+    private float projectile_speed = 5f;
+    private float projectile_acceleration = 0.5f;
 
     private float special_size = 5f;
     private float special_cooldown = 3000f;
@@ -27,9 +27,7 @@ public class Player extends Actor {
 
     private Sprite sprite;
 
-    private float teleport_distace;
-
-    public Player(String name, float health, float mana_cap, float mana_regen, float damage, float speed, float projectile_speed) {
+    public Player(String name, float health, float mana_cap, float mana_regen, float damage, float speed) {
         this.player_name = name;
         this.health = health;
         this.mana_cap = mana_cap;
@@ -40,10 +38,7 @@ public class Player extends Actor {
         this.projectile_speed = projectile_speed;
         sprite = new Sprite(new Texture("badlogic.jpg"));
     }
-    public void setTeleport_distace(){
-        teleport_distace = this.getStage().screenToStageCoordinates(new Vector2(Gdx.graphics.getWidth()/2f,0f)).x;
 
-    }
     public float getMana_cap() {
         return mana_cap;
     }
@@ -117,7 +112,7 @@ public class Player extends Actor {
     public Projectile attack() {
         if (mana > Projectile.cost){
             mana -= Projectile.cost;
-            return new Projectile(this, projectile_speed, damage);
+            return new Projectile(this, projectile_speed, projectile_acceleration, damage);
         }
         return null;
     }
@@ -131,31 +126,8 @@ public class Player extends Actor {
         return null;
     }
 
-    public void teleport(Vector2 pos){
-        if(mana < 20)
-            return;
-        mana -= 20;
-        float x,y;
-        if(direction == Direction.NORTH){
-            x = 0;
-            y = teleport_distace;
-        }
-        else if(direction == Direction.EAST){
-            x = teleport_distace;
-            y = 0;
-        }
-        else if(direction == Direction.SOUTH){
-            x = 0;
-            y = -teleport_distace;
-        }
-        else {
-            x = -teleport_distace;
-            y = 0;
-        }
-
-        pos.x += x;
-        pos.y += y;
-
+    public void teleport(){
+        mana -= 50;
     }
 
     public Sprite getSprite() {
