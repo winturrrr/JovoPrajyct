@@ -2,12 +2,31 @@ package com.mygdx.game;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class Client {
+    private float p_x;
+    private float p_y;
+    private int p_d;
+    private int projectile;
+    private float s_x;
+    private float s_y;
+    private int special;
+
+    public Client(float p_x, float p_y, int p_d, int projectile, float s_x, float s_y, int special) {
+        this.p_x = p_x;
+        this.p_y = p_y;
+        this.p_d = p_d;
+        this.projectile = projectile;
+        this.s_x = s_x;
+        this.s_y = s_y;
+        this.special = special;
+    }
+
     public void go() {
         String hostname = "localhost";
         int port = 1978;
@@ -33,14 +52,18 @@ public class Client {
             while (true) {
                 System.out.print("Enter an integer (0 to stop connection, -1 to stop server): ");
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                String keyboardInput = br.readLine();
-                os.writeBytes(keyboardInput + "\n");
-                int n = Integer.parseInt(keyboardInput);
+                //String keyboardInput = br.readLine();
+                os.writeBytes(  p_x + " " + p_y + " " + p_d + " " + projectile + " " + s_x + " " + s_y + " " + special + "\n");//x,y,hp
+                int n = 2;
                 if (n == 0 || n == -1) {
                     break;
                 }
                 String responseLine = is.readLine();
-                System.out.println("Server returns its square as: " + responseLine);
+                System.out.println("Server returns : " + responseLine);
+                     for(int i=0;i<1;i++){
+                        System.out.println(is.readLine());
+
+                    }
             }
             os.close();
             is.close();
