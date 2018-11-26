@@ -16,7 +16,8 @@ public class Player extends Actor {
     private float speed;
     private float mana_regen;
 
-    private float projectile_speed = 3f;
+    private float projectile_speed = 5f;
+    private float projectile_acceleration = 0.5f;
 
     private float special_size = 5f;
     private float special_cooldown = 3000f;
@@ -29,7 +30,7 @@ public class Player extends Actor {
 
     private float teleport_distace;
 
-    public Player(String name, float health, float mana_cap, float mana_regen, float damage, float speed, float projectile_speed) {
+    public Player(String name, float health, float mana_cap, float mana_regen, float damage, float speed) {
         this.player_name = name;
         this.health = health;
         this.mana_cap = mana_cap;
@@ -37,7 +38,6 @@ public class Player extends Actor {
         this.mana_regen = mana_regen;
         this.damage = damage;
         this.speed = speed;
-        this.projectile_speed = projectile_speed;
         sprite = new Sprite(new Texture("badlogic.jpg"));
     }
     public void setTeleport_distace(){
@@ -117,7 +117,7 @@ public class Player extends Actor {
     public Projectile attack() {
         if (mana > Projectile.cost){
             mana -= Projectile.cost;
-            return new Projectile(this, projectile_speed, damage);
+            return new Projectile(this, projectile_speed, projectile_acceleration, damage);
         }
         return null;
     }
