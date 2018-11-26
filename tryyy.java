@@ -1,3 +1,5 @@
+
+
 package com.tryagain.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -35,7 +37,7 @@ class TouchCoord{
         return Gdx.graphics.getHeight() - Gdx.input.getY();
     }
 }
-public class tryyy extends ApplicationAdapter implements InputProcessor {
+public class tryyy extends ApplicationAdapter {
     float CAM_WIDTH = 1000;
     float CAM_HEIGHT =  500;
     float aspectRatio;
@@ -45,17 +47,14 @@ public class tryyy extends ApplicationAdapter implements InputProcessor {
     private float screenHeight;
 
     private Batch batch ;
-    private Sprite sprite;
+
     private Sprite map;
 
-    private Vector3 pos;
 
     private float lastX;
     private float lastY;
     private Viewport viewport;
 
-    private Touchpad touchpad;
-    private Skin skin;
 
     private Stage maingame;
 
@@ -67,9 +66,6 @@ public class tryyy extends ApplicationAdapter implements InputProcessor {
 
 
         batch = new SpriteBatch();
-        sprite = new Sprite(new Texture("Sprite.png"));
-        pos = new Vector3(screenWidth/2f - sprite.getWidth()/2,
-                screenHeight/2f - sprite.getHeight()/2,0);
 
 
 
@@ -78,7 +74,7 @@ public class tryyy extends ApplicationAdapter implements InputProcessor {
 
 
         float CAM_WIDTH_ZOOM = 4;
-        float CAM_HEIGHT_ZOOM = 4;
+        float CAM_HEIGHT_ZOOM = 3;
         CAM_HEIGHT = map.getTexture().getHeight()/CAM_HEIGHT_ZOOM ;
         CAM_WIDTH = map.getTexture().getWidth()/CAM_WIDTH_ZOOM;
 
@@ -92,25 +88,8 @@ public class tryyy extends ApplicationAdapter implements InputProcessor {
 
         viewport = new StretchViewport(CAM_WIDTH,CAM_HEIGHT,cam);
         viewport.apply();
-        Gdx.input.setInputProcessor(this);
 
 
-        sprite.setPosition(cam.position.x - sprite.getWidth()/2f ,cam.position.y - sprite.getHeight()/2f);
-        sprite.setSize(CAM_WIDTH/10,CAM_HEIGHT/10);
-
-//        skin = new Skin();
-//        skin.add("shit",new Texture("badlogic.jpg"));
-//        skin.add("shittier",new Texture("Sprite.png"));
-//        Touchpad.TouchpadStyle tp = new Touchpad.TouchpadStyle();
-//        tp.background = skin.getDrawable("shit");
-//        tp.knob = skin.getDrawable("shittier");
-//
-//        touchpad = new Touchpad(20,tp);
-
-//
-//        maingame = new Stage(viewport);
-//        maingame.addActor(touchpad);
-//        Gdx.input.setInputProcessor(maingame);
 
         maingame = new MyStage(viewport);
         Gdx.input.setInputProcessor(maingame);
@@ -132,10 +111,7 @@ public class tryyy extends ApplicationAdapter implements InputProcessor {
         Gdx.gl.glClearColor(0, 0, 0, 1);
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        if(Gdx.input.isTouched()){
-            pos.set(Gdx.input.getX(),Gdx.input.getY(),0);
-            cam.unproject(pos);
-            }
+
 
         batch.begin();
         batch.setProjectionMatrix(cam.combined);
@@ -143,7 +119,6 @@ public class tryyy extends ApplicationAdapter implements InputProcessor {
 //        batch.draw(sprite,pos.x,pos.y);
 
 //    batch.draw(sprite,cam.position.x - sprite.getWidth()/2f,cam.position.y - sprite.getHeight()/2f) ;
-        batch.draw(sprite,sprite.getX(),sprite.getY(),sprite.getWidth(),sprite.getHeight());
 //        touchpad.draw(batch,1f);
         batch.end();
 
@@ -156,66 +131,9 @@ public class tryyy extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public void dispose() {
-        sprite.getTexture().dispose();
         batch.dispose();
         maingame.dispose();
     }
 
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        lastX = screenX;
-        lastY = screenY;
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if( sprite.getX() + screenX - lastX < 0 || sprite.getX() + screenX - lastX > map.getTexture().getWidth() - sprite.getWidth()){
-           lastX = screenX ;
-
-        }
-//        if( sprite.getY() - screenY + lastY < 0 ){
-            if( sprite.getY() - screenY + lastY < 0 || sprite.getY() - screenY + lastY > map.getTexture().getHeight() - sprite.getHeight()){
-
-                lastY = screenY;
-        }
-        cam.translate(screenX - lastX,lastY - screenY);
-
-        sprite.translate(screenX-lastX,lastY-screenY);
-        lastX = screenX;
-        lastY = screenY;
-
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
-    }
-
 }
+
