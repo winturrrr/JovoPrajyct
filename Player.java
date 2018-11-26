@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 
 public class Player extends Actor {
 
@@ -16,8 +17,8 @@ public class Player extends Actor {
     private float speed;
     private float mana_regen;
 
-    private float projectile_speed = 5f;
-    private float projectile_acceleration = 0.5f;
+    private float projectile_speed = 2f;
+    private float projectile_acceleration = 0.2f;
 
     private float special_size = 5f;
     private float special_cooldown = 3000f;
@@ -30,7 +31,10 @@ public class Player extends Actor {
 
     private float teleport_distace;
 
+    private Group enermyGrouop;
+
     public Player(String name, float health, float mana_cap, float mana_regen, float damage, float speed) {
+        enermyGrouop = new Group();
         this.player_name = name;
         this.health = health;
         this.mana_cap = mana_cap;
@@ -44,6 +48,11 @@ public class Player extends Actor {
         teleport_distace = this.getStage().screenToStageCoordinates(new Vector2(Gdx.graphics.getWidth()/2f,0f)).x;
 
     }
+
+    public void addEnermy(Actor enermy){
+        enermyGrouop.addActor(enermy);
+    }
+
     public float getMana_cap() {
         return mana_cap;
     }
@@ -117,16 +126,19 @@ public class Player extends Actor {
     public Projectile attack() {
         if (mana > Projectile.cost){
             mana -= Projectile.cost;
-            return new Projectile(this, projectile_speed, projectile_acceleration, damage);
+            return new Projectile(this, projectile_speed, projectile_acceleration, damage, enermyGrouop);
         }
         return null;
+    }
+    public boolean attakable(){
+        return mana > Projectile.cost;
     }
 
     public Special special(){
         if (mana > Special.cost && Math.min(System.currentTimeMillis() - special_last_casted, special_cooldown) >= special_cooldown){
             mana -= Special.cost;
             special_last_casted = System.currentTimeMillis();
-            return new Special(this, special_size, damage * 4, special_delay, special_cooldown);
+            return new Special(this,getX()-1,getY()-1, damage * 4, special_delay, special_cooldown);
         }
         return null;
     }
@@ -167,6 +179,10 @@ public class Player extends Actor {
         this.sprite = sprite;
     }
 
+    public void flip(){
+        sprite.flip(true   ,false   );
+
+    }
     @Override
     protected void positionChanged() {
         sprite.setPosition(getX(),getY());
