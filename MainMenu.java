@@ -137,13 +137,13 @@ public class MainMenu extends Stage {
 
         Texture texture = new Texture("badlogic.jpg");
         Texture green = new Texture("Sprite.png");
-        skin.add("shit", texture);
-        skin.add("shittier", green);
+        skin.add("down", texture);
+        skin.add("up", green);
 
         TextButton.TextButtonStyle tb = new TextButton.TextButtonStyle();
         tb.font = font1;
-        tb.up = skin.getDrawable("shittier");
-        tb.down = skin.getDrawable("shit");
+        tb.up = skin.getDrawable("up");
+        tb.down = skin.getDrawable("down");
 
         textButton1 = new TextButton("Host Game", tb);
         textButton2 = new TextButton("Join Game", tb);
