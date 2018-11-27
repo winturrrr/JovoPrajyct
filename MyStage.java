@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.tryagain.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -16,8 +16,8 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-public class MyStage extends Stage  implements InputProcessor {
-
+public class MyStage extends Stage implements InputProcessor {
+    private boolean specialReady = false;
     private boolean moving;
     private Vector2 pos;
     private boolean temp;
@@ -60,6 +60,7 @@ public class MyStage extends Stage  implements InputProcessor {
 
 
 
+
     public MyStage(Viewport viewport) {
 
         super(viewport);
@@ -69,11 +70,11 @@ public class MyStage extends Stage  implements InputProcessor {
 
         bg = new Image(new Texture("bg.png"));
         arena = new Image(new Texture("tate-grassland.png"));
-        CAM_HEIGHT = arena.getImageHeight()/CAM_HEIGHT_ZOOM ;
-        CAM_WIDTH = arena.getImageWidth()/CAM_WIDTH_ZOOM;
+        CAM_HEIGHT = arena.getImageHeight() / CAM_HEIGHT_ZOOM;
+        CAM_WIDTH = arena.getImageWidth() / CAM_WIDTH_ZOOM;
 
-        bg.setSize(arena.getWidth()*2f, arena.getHeight()*2f);
-        bg.setPosition(-arena.getWidth()/2f,-arena.getHeight()/2f);
+        bg.setSize(arena.getWidth() * 2f, arena.getHeight() * 2f);
+        bg.setPosition(-arena.getWidth() / 2f, -arena.getHeight() / 2f);
 
         bg.setName("bg");
         arena.setName("arena");
@@ -82,16 +83,16 @@ public class MyStage extends Stage  implements InputProcessor {
 
         //touchpad initialize
         Skin skin = new Skin();
-        skin.add("background",new Texture("touchpad_background.png"));
-        skin.add("knob",new Texture("touchpad_knob.png"));
+        skin.add("background", new Texture("touchpad_background.png"));
+        skin.add("knob", new Texture("touchpad_knob.png"));
         Touchpad.TouchpadStyle tp = new Touchpad.TouchpadStyle();
         tp.background = skin.getDrawable("background");
         tp.knob = skin.getDrawable("knob");
-        touchpad = new Touchpad(0,tp);
+        touchpad = new Touchpad(0, tp);
         touchpad.setName("touchpad");
-        touchpad.setSize(getCamera().viewportWidth/5f,getCamera().viewportWidth/5f);
-        touchpad.getStyle().knob.setMinWidth(touchpad.getWidth()/2f);
-        touchpad.getStyle().knob.setMinHeight(touchpad.getHeight()/2f);
+        touchpad.setSize(getCamera().viewportWidth / 5f, getCamera().viewportWidth / 5f);
+        touchpad.getStyle().knob.setMinWidth(touchpad.getWidth() / 2f);
+        touchpad.getStyle().knob.setMinHeight(touchpad.getHeight() / 2f);
 
         this.addActor(touchpad);
 
@@ -104,38 +105,41 @@ public class MyStage extends Stage  implements InputProcessor {
         tb.up = skin.getDrawable("background");
         tb.down = skin.getDrawable("knob");
 
-        teleportButton = new TextButton("B",tb);
-        attackButton = new TextButton("A",tb);
-        specialButton = new TextButton("S",tb);
+        teleportButton = new TextButton("B", tb);
+        attackButton = new TextButton("A", tb);
+        specialButton = new TextButton("S", tb);
+        teleportButton.setName("teleportbutton");
+        attackButton.setName("attackbutton");
+        specialButton.setName("specialbutton");
 
 //        textButton.setWidth(touchpad.getWidth());
 //        textButton.setHeight(touchpad.getHeight());
 
-        attackButton.setSize(touchpad.getWidth(),touchpad.getHeight());
+        attackButton.setSize(touchpad.getWidth(), touchpad.getHeight());
         textbuttonPosition = new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         textbuttonPosition = screenToStageCoordinates(textbuttonPosition);
-        attackButton.setPosition(textbuttonPosition.x - attackButton.getWidth(),textbuttonPosition.y);
+        attackButton.setPosition(textbuttonPosition.x - attackButton.getWidth(), textbuttonPosition.y);
 
         this.addActor(attackButton);
 
-        teleportButton.setSize(touchpad.getWidth()*2/3f,touchpad.getHeight()*2/3f);
+        teleportButton.setSize(touchpad.getWidth() * 2 / 3f, touchpad.getHeight() * 2 / 3f);
 //        textbuttonPosition = new Vector2(Gdx.graphics.getWidth()*6f/7, Gdx.graphics.getHeight() * 3f/4);
 //        textbuttonPosition = screenToStageCoordinates(textbuttonPosition);
-        teleportButton.setPosition(attackButton.getX() + attackButton.getWidth()/2f - teleportButton.getWidth()/2f,attackButton.getY()+attackButton.getHeight());
+        teleportButton.setPosition(attackButton.getX() + attackButton.getWidth() / 2f - teleportButton.getWidth() / 2f, attackButton.getY() + attackButton.getHeight());
 
         this.addActor(teleportButton);
 
-        specialButton.setSize(touchpad.getWidth()*2/3f,touchpad.getHeight()*2/3f);
+        specialButton.setSize(touchpad.getWidth() * 2 / 3f, touchpad.getHeight() * 2 / 3f);
 //        textbuttonPosition = new Vector2(Gdx.graphics.getWidth()*7f/10, Gdx.graphics.getHeight());
 //        textbuttonPosition = screenToStageCoordinates(textbuttonPosition);
-        specialButton.setPosition(attackButton.getX() - specialButton.getWidth(),attackButton.getY() +attackButton.getHeight()/2f - specialButton.getHeight()/2f);
+        specialButton.setPosition(attackButton.getX() - specialButton.getWidth(), attackButton.getY() + attackButton.getHeight() / 2f - specialButton.getHeight() / 2f);
 
         this.addActor(specialButton);
 
-        player = new Player("Player1",100f,100f,0.3f,10f,3f);
-        player.setSize(getCamera().viewportWidth/5f,getCamera().viewportHeight/4f);
-        player.setPosition(getCamera().position.x - player.getWidth()/2f,getCamera().position.y - player.getHeight()/2f);
-        move = new Vector2(0,0);
+        player = new Player("Player1", 100f, 100f, 0.3f, 10f, 3f);
+        player.setSize(getCamera().viewportWidth / 5f, getCamera().viewportHeight / 4f);
+        player.setPosition(getCamera().position.x - player.getWidth() / 2f, getCamera().position.y - player.getHeight() / 2f);
+        move = new Vector2(0, 0);
 
 //        player.setPosition(getCamera().position.x ,getCamera().position.y);
 //        player.setPosition(0,0);
@@ -145,21 +149,21 @@ public class MyStage extends Stage  implements InputProcessor {
         player.setTeleport_distace();
 
         hp_bar = new Image(new Texture("health_green.png"));
-        hp_bar.setSize(this.getCamera().viewportWidth,this.getCamera().viewportHeight/bar_heightMod);
-        hp_bar.setPosition(0,this.getCamera().viewportHeight - hp_bar.getHeight());
+        hp_bar.setSize(this.getCamera().viewportWidth, this.getCamera().viewportHeight / bar_heightMod);
+        hp_bar.setPosition(0, this.getCamera().viewportHeight - hp_bar.getHeight());
 
 
         mp_bar = new Image(new Texture("mana_blue.png"));
-        mp_bar.setSize(this.getCamera().viewportWidth,this.getCamera().viewportHeight/bar_heightMod);
-        mp_bar.setPosition(0,this.getCamera().viewportHeight - hp_bar.getHeight()*2);
+        mp_bar.setSize(this.getCamera().viewportWidth, this.getCamera().viewportHeight / bar_heightMod);
+        mp_bar.setPosition(0, this.getCamera().viewportHeight - hp_bar.getHeight() * 2);
 
         hp_red = new Image(new Texture("health_red.png"));
-        hp_red.setSize(this.getCamera().viewportWidth,this.getCamera().viewportHeight/bar_heightMod);
-        hp_red.setPosition(0,this.getCamera().viewportHeight - hp_bar.getHeight());
+        hp_red.setSize(this.getCamera().viewportWidth, this.getCamera().viewportHeight / bar_heightMod);
+        hp_red.setPosition(0, this.getCamera().viewportHeight - hp_bar.getHeight());
 
         mp_red = new Image(new Texture("health_red.png"));
-        mp_red.setSize(this.getCamera().viewportWidth,this.getCamera().viewportHeight/bar_heightMod);
-        mp_red.setPosition(0,this.getCamera().viewportHeight - hp_bar.getHeight()*2);
+        mp_red.setSize(this.getCamera().viewportWidth, this.getCamera().viewportHeight / bar_heightMod);
+        mp_red.setPosition(0, this.getCamera().viewportHeight - hp_bar.getHeight() * 2);
 
         this.addActor(hp_red);
         this.addActor(mp_red);
@@ -182,47 +186,65 @@ public class MyStage extends Stage  implements InputProcessor {
 //        pos = this.screenToStageCoordinates(pos);
 
         //actor select
-        Vector2 temp = screenToStageCoordinates(new Vector2(screenX,screenY));
-        Actor actor = hit(temp.x,temp.y,false);
+        Vector2 temp = screenToStageCoordinates(new Vector2(screenX, screenY));
+        Actor actor = hit(temp.x, temp.y, false);
 
         //set touchpad
-        if( actor == null || actor.getName() == "bg" || actor.getName() == "arena" || actor.getName() == "touchpad"){
-            pos.set(screenX,screenY);
-            pos = this.screenToStageCoordinates(pos);
+        if ((actor == null || actor.getName() != "attackbutton" && actor.getName() != "specialbutton" && actor.getName() != "teleportbutton")) {
 
-            moving = true;
-            touchpadIndex = pointer;
-            touchpad.setColor(touchpad.getColor().r,touchpad.getColor().g,touchpad.getColor().b, 1);
-            touchpad.setPosition(pos.x - touchpad.getWidth()/2f,pos.y - touchpad.getHeight()/2f);
+            if(!moving && !specialReady ) {
+                pos.set(screenX, screenY);
+                pos = this.screenToStageCoordinates(pos);
+
+                moving = true;
+                touchpadIndex = pointer;
+                touchpad.setColor(touchpad.getColor().r, touchpad.getColor().g, touchpad.getColor().b, 1);
+                touchpad.setPosition(pos.x - touchpad.getWidth() / 2f, pos.y - touchpad.getHeight() / 2f);
+            }
+            if(specialReady){
+                temp.x = screenX;
+                temp.y = screenY;
+                temp = screenToStageCoordinates(temp);
+                addActor(player.special(temp.x,temp.y));
+                specialReady = false;
+                projectile_num += 1;
+            }
         }
 
         //ultra american football
-        boolean bool =  super.touchDown(screenX, screenY, pointer, button);
+        boolean bool = super.touchDown(screenX, screenY, pointer, button);
 
         //read, dumb bitch
-        if(teleportButton.isPressed()){
+        if (teleportButton.isPressed()) {
             player.teleport(move);
 
-            if (player.getX() + move.x <= 0){
+            if (player.getX() + move.x <= 0) {
                 move.x = -player.getX();
             }
-            if (player.getY() + move.y <= 0){
+            if (player.getY() + move.y <= 0) {
                 move.y = -player.getY();
             }
-            if(player.getX() + move.x >= mapWidth - player.getWidth()){
+            if (player.getX() + move.x >= mapWidth - player.getWidth()) {
                 move.x = mapWidth - player.getX() - player.getWidth();
             }
-            if(player.getY() + move.y >= mapHeight - player.getHeight()){
+            if (player.getY() + move.y >= mapHeight - player.getHeight()) {
                 move.y = mapHeight - player.getY() - player.getHeight();
             }
         }
 
         //read, dumb bitch
-        if(attackButton.isPressed() && player.attakable())
-        {
+        if (attackButton.isPressed() && player.attakable()) {
             addActor(player.attack());
             projectile_num += 1;
         }
+
+        if (specialButton.isPressed()) {
+            specialReady = !specialReady;
+//            specialReady = true;
+//            addActor(player.special());
+//            projectile_num += 1;
+        }
+
         return bool;
     }
 
@@ -235,11 +257,11 @@ public class MyStage extends Stage  implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        temp =  super.touchUp(screenX, screenY, pointer, button);
-        if(moving == true && pointer == touchpadIndex){
+        temp = super.touchUp(screenX, screenY, pointer, button);
+        if (moving == true && pointer == touchpadIndex) {
             moving = false;
             touchpadIndex = -1;
-            touchpad.setColor(touchpad.getColor().r,touchpad.getColor().g,touchpad.getColor().b,0);
+            touchpad.setColor(touchpad.getColor().r, touchpad.getColor().g, touchpad.getColor().b, 0);
         }
         return temp;
     }
@@ -247,48 +269,43 @@ public class MyStage extends Stage  implements InputProcessor {
     @Override
     public void draw() {
         //touchpad direction (flips and shits)
-        if(moving == true)
-        {
-            float x = speedMod,y = speedMod;
+        if (moving == true) {
+            float x = speedMod, y = speedMod;
 
             x *= touchpad.getKnobPercentX();
             y *= touchpad.getKnobPercentY();
-            if(Math.abs(x) > Math.abs(y) )
-            {
-                if(x > 0){
+            if (Math.abs(x) > Math.abs(y)) {
+                if (x > 0) {
 //                    if(player.getDirection() != Direction.EAST)
-                    if(player.getDirection() != Direction.EAST){
+                    if (player.getDirection() != Direction.EAST) {
                         player.flip();
                     }
                     player.setDirection(Direction.EAST);
-                }
-                else{
-                    if(player.getDirection() != Direction.WEST) {
+                } else {
+                    if (player.getDirection() != Direction.WEST) {
                         player.flip();
                     }
                     player.setDirection(Direction.WEST);
                 }
-            }
-            else{
-                if(y >0){
+            } else {
+                if (y > 0) {
                     player.setDirection(Direction.NORTH);
-                }
-                else{
+                } else {
                     player.setDirection(Direction.SOUTH);
                 }
             }
 
             //borders
-            if (x < 0 && player.getX() <= 0){
+            if (x < 0 && player.getX() <= 0) {
                 x = 0;
             }
-            if (y < 0 && player.getY() <= 0){
+            if (y < 0 && player.getY() <= 0) {
                 y = 0;
             }
-            if( x > 0 &&  player.getX() >= mapWidth - player.getWidth()){
+            if (x > 0 && player.getX() >= mapWidth - player.getWidth()) {
                 x = 0;
             }
-            if( y > 0 && player.getY() >= mapHeight - player.getHeight()){
+            if (y > 0 && player.getY() >= mapHeight - player.getHeight()) {
                 y = 0;
             }
 
@@ -299,32 +316,37 @@ public class MyStage extends Stage  implements InputProcessor {
             //touchpad
             pos.x += move.x;
             pos.y += move.y;
-            touchpad.setPosition(pos.x - touchpad.getWidth()/2f ,pos.y - touchpad.getHeight()/2f );
+            touchpad.setPosition(pos.x - touchpad.getWidth() / 2f, pos.y - touchpad.getHeight() / 2f);
+            touchpad.setZIndex(9 + projectile_num);
 
 //            mp_bar.setSize(mp_bar.getWidth()-1,mp_bar.getHeight());
 //            player.setMana(player.getMana() - 1);
         }
 
         //ui position
-        player.setPosition(player.getX() + move.x,player.getY() + move.y);
-        ((OrthographicCamera)this.getCamera()).position.x = player.getX() + player.getWidth()/2f;
-        ((OrthographicCamera)this.getCamera()).position.y = player.getY() + player.getHeight()/2f;
+        player.setPosition(player.getX() + move.x, player.getY() + move.y);
+        ((OrthographicCamera) this.getCamera()).position.x = player.getX() + player.getWidth() / 2f;
+        ((OrthographicCamera) this.getCamera()).position.y = player.getY() + player.getHeight() / 2f;
 
         teleportButton.setPosition(teleportButton.getX() + move.x, teleportButton.getY() + move.y);
         attackButton.setPosition(attackButton.getX() + move.x, attackButton.getY() + move.y);
         specialButton.setPosition(specialButton.getX() + move.x, specialButton.getY() + move.y);
+        teleportButton.setZIndex(10 + projectile_num);
+        attackButton.setZIndex(10 + projectile_num);
+        specialButton.setZIndex(10 + projectile_num);
+
         hp_bar.setPosition(hp_bar.getX() + move.x, hp_bar.getY() + move.y);
         mp_bar.setPosition(mp_bar.getX() + move.x, mp_bar.getY() + move.y);
 
         hp_red.setPosition(hp_bar.getX(), hp_bar.getY());
-        mp_red.setPosition(mp_bar.getX(), mp_bar.getY() );
-        mp_bar.setSize(player.getMana()/player.getMana_cap() * this.getCamera().viewportWidth, mp_bar.getHeight());
+        mp_red.setPosition(mp_bar.getX(), mp_bar.getY());
+        mp_bar.setSize(player.getMana() / player.getMana_cap() * this.getCamera().viewportWidth, mp_bar.getHeight());
 
         hp_bar.setZIndex(10 + projectile_num);
-        hp_red.setZIndex(hp_bar.getZIndex()-1);
+        hp_red.setZIndex(hp_bar.getZIndex() - 1);
 
         mp_bar.setZIndex(10 + projectile_num);
-        mp_red.setZIndex(mp_bar.getZIndex()-1);
+        mp_red.setZIndex(mp_bar.getZIndex() - 1);
 
         move.x = 0;
         move.y = 0;
@@ -339,15 +361,11 @@ public class MyStage extends Stage  implements InputProcessor {
         player.getSprite().getTexture().dispose();
     }
 
-    public void setZoom(float width, float height){
+    public void setZoom(float width, float height) {
         zoomWidth = width;
         zoomHeight = height;
         mapHeight = this.getCamera().viewportHeight * zoomHeight;
         mapWidth = this.getCamera().viewportWidth * zoomWidth;
-    }
-
-    public Player getPlayer(){
-        return player;
     }
 
 }
