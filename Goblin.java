@@ -1,11 +1,8 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-
 public class Goblin extends Enemy {
     public Goblin(float health, float damage, float speed, Player player) {
-        super("badlogic.jpg", health, damage, speed, player);
+        super("goblin_run.png", health, damage, speed, player);
     }
 
     @Override
