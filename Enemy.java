@@ -1,7 +1,30 @@
 package com.mygdx.game;
 
-public class Enemy extends Player {
-    public Enemy(String name, float health, float mana_cap, float mana_regen, float damage, float speed) {
-        super(name, health, mana_cap, mana_regen, damage, speed);
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+
+public abstract class Enemy extends Image {
+    protected float health;
+    protected float damage;
+    protected float speed;
+    protected Player player;
+//    private Sprite sprite;
+
+    public Enemy(String file_path, float health, float damage, float speed, Player player) {
+        super(new Texture(Gdx.files.internal(file_path)));
+        this.health = health;
+        this.damage = damage;
+        this.speed = speed;
+        this.player = player;
+//        this.sprite = new Sprite(new Texture(Gdx.files.internal(file_path)));
+    }
+
+    public void move(){
+        System.out.println("This is an abstract class");
+    }
+
+    public void attack(){
+        System.out.println("This is an abstract class");
     }
 }
