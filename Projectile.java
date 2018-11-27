@@ -1,4 +1,5 @@
-package com.tryagain.game;
+package com.mygdx.game;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -12,7 +13,7 @@ import java.awt.image.ImageProducer;
 
 public class Projectile extends com.badlogic.gdx.scenes.scene2d.ui.Image {
     public static float cost = 10;
-//    private Player player;
+    //    private Player player;
     Group enermyGroup;
     private float speed;
     private float acceleration;

@@ -1,24 +1,19 @@
-package com.tryagain.game;
+package com.mygdx.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Timer;
 
-public class Special extends Image {
+public class Special extends Actor {
     public static float cost = 20;
     private Player player;
-    private float radius = 10f;
+    private float sides;
     private float damage;
-    private float spawn_time;
     private float delay;
     private float cooldown;
 
-    public Special(Player player, float target_x, float target_y, float damage, float delay, float cooldown) {
-        super(new Texture(Gdx.files.internal("badlogic.jpg")));
+    public Special(Player player, float sides, float damage, float delay, float cooldown) {
         this.player = player;
-        setPosition(target_x, target_y);
+        this.sides = sides;
         this.damage = damage;
         this.delay = delay;
         this.cooldown = cooldown;
@@ -36,13 +31,5 @@ public class Special extends Image {
                     return true;
                 }
         return false;
-    }
-
-    @Override
-    public void act(float delta) {
-        if (System.currentTimeMillis() - spawn_time >= delay){
-
-        }
-        super.act(delta);
     }
 }

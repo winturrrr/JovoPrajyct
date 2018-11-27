@@ -1,6 +1,4 @@
-
-
-package com.tryagain.game;
+package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -29,16 +27,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 
-class TouchCoord {
-    public static float getX() {
-        return Gdx.input.getX();
-    }
-
-    public static float getY() {
-        return Gdx.graphics.getHeight() - Gdx.input.getY();
-    }
-}
-
 public class tryyy extends ApplicationAdapter {
     float CAM_WIDTH = 1000;
     float CAM_HEIGHT = 500;
@@ -62,9 +50,17 @@ public class tryyy extends ApplicationAdapter {
 
     boolean inGame = false;
 
+    private float p_x;
+    private float p_y;
+    private int p_d;
+    private int is_atk;
+    private float s_x;
+    private float s_y;
+
+
+
     @Override
     public void create() {
-
 
         mainmenu = new MainMenu();
         Gdx.input.setInputProcessor(mainmenu);
@@ -116,6 +112,19 @@ public class tryyy extends ApplicationAdapter {
 //        batch.setProjectionMatrix(cam.combined);
 //        batch.draw(map,0,0);
 //        batch.end();
+        if (inGame){
+            if (((MainMenu) mainmenu).getHost() == 1 && !(((MainMenu)mainmenu).isInUsed())){
+                ThreadedServer threadedServer = new ThreadedServer();
+                Player hostPlayer = ((MyStage)maingame).getPlayer();
+                Client hostClient = new Client(hostPlayer.getX(), hostPlayer.getY(), hostPlayer.getDirection().ordinal(), hostPlayer.get_projectile_fired(), 0f, 0f, 0);
+                hostClient.go();
+            }
+            if (((MainMenu) mainmenu).getHost() == 0 && !(((MainMenu)mainmenu).isInUsed())){
+                Player joinPlayer = ((MyStage)maingame).getPlayer();
+                Client joinClient = new Client(joinPlayer.getX(), joinPlayer.getY(), joinPlayer.getDirection().ordinal(), joinPlayer.get_projectile_fired(), 0f, 0f, 0);
+                joinClient.go();
+            }
+        }
 
         inGame = ((MainMenu) mainmenu).pressed;
         if (!inGame) {
@@ -140,4 +149,3 @@ public class tryyy extends ApplicationAdapter {
     }
 
 }
-

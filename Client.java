@@ -16,7 +16,9 @@ public class Client {
     private float s_x;
     private float s_y;
     private int special;
+    private String player ;
 
+    public  Client(String player){this.player = player;}
     public Client(float p_x, float p_y, int p_d, int projectile, float s_x, float s_y, int special) {
         this.p_x = p_x;
         this.p_y = p_y;
@@ -62,7 +64,6 @@ public class Client {
                 System.out.println("Server returns : " + responseLine);
                      for(int i=0;i<1;i++){
                         System.out.println(is.readLine());
-
                     }
             }
             os.close();
